@@ -1,0 +1,38 @@
+﻿@model SimpleCreditCalculator.Models.InputDataCredit
+
+@{
+    ViewData["Title"] = "Данные для расчета кредита";
+}
+
+<h4 class="text-center">@ViewData["Title"]</h4>
+<hr/>
+
+<div class="row">
+    <div class="col-md-4" style="margin-left: 40%; margin-top: 5%;">
+        @using (Html.BeginForm("PaymentSchedule", "Credit", FormMethod.Post, new { style = "width: 300px" }))
+        {
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label>Сумма кредита</label>
+                <input asp-for="SumOfCredit" class="form-control"/>
+                <span asp-validation-for="SumOfCredit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Срок кредита</label>
+                <input asp-for="CreditTerm" class="form-control"/>
+                <span asp-validation-for="CreditTerm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Процентная ставка в год(%)</label>
+                <input asp-for="InterestRateOfYear" class="form-control"/>
+                <span asp-validation-for="InterestRateOfYear" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Рассчитать</button>
+        }
+    </div>
+</div>
+        
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
