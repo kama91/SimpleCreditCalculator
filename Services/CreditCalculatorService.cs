@@ -15,7 +15,7 @@ namespace SimpleCreditCalculator.Services
             _logger = logger;
         }
 
-        public IOutputDataCreditDetails GetOutputDataCreditDetails(IInputDataCredit inputDataCredit)
+        public IOutputDataCredit GetOutputDataCreditDetails(IInputDataCredit inputDataCredit)
         {
             if (inputDataCredit == null)
             {
@@ -43,7 +43,7 @@ namespace SimpleCreditCalculator.Services
                 date = date.AddMonths(1);
             }
 
-            return new OutputDataCreditDetails(paymentsDetails, GetOverPayment(inputDataCredit));
+            return new OutputDataCredit(paymentsDetails, GetOverPayment(inputDataCredit));
         }
 
         private decimal GetAmountPayment(IInputDataCredit inputDataCredit)

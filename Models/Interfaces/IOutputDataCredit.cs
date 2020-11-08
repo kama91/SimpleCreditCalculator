@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SimpleCreditCalculator.Models.Interfaces
 {
-    public interface IOutputDataCreditDetails
+    public interface IOutputDataCredit
     {
         IReadOnlyCollection<IPaymentDetails> PaymentDetails { get; }
 

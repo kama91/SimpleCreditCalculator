@@ -20,7 +20,7 @@ namespace SimpleCreditCalculator.Controllers
         }
         
         [HttpGet("getoutputdatacreditdetails")]
-        public IOutputDataCreditDetails GetOutputDataCreditDetails([FromBody] InputDataCredit inputDataCredit)
+        public IOutputDataCredit GetOutputDataCreditDetails([FromBody] InputDataCredit inputDataCredit)
         {
             return _creditCalculatorService.GetOutputDataCreditDetails(inputDataCredit);
         }

@@ -3,12 +3,12 @@ using SimpleCreditCalculator.Models.Interfaces;
 
 namespace SimpleCreditCalculator.Models
 {
-    public class OutputDataCreditDetails : IOutputDataCreditDetails
+    public class OutputDataCredit : IOutputDataCredit
     {
         public IReadOnlyCollection<IPaymentDetails> PaymentDetails { get; }
         public decimal OverPayment { get; }
 
-        public OutputDataCreditDetails(
+        public OutputDataCredit(
             IReadOnlyCollection<IPaymentDetails> paymentDetails,
             decimal overPayment)
         {

@@ -12,7 +12,7 @@ namespace SimpleCreditCalculator.Controllers
     {
         private readonly ILogger<CreditController> _logger;
         private readonly ICreditCalculatorService _creditCalculatorService;
-        private static IOutputDataCreditDetails _outputDataCreditDetails;
+        private static IOutputDataCredit _outputDataCreditDetails;
 
         public CreditController(ICreditCalculatorService creditCalculatorService, ILogger<CreditController> logger)
         {

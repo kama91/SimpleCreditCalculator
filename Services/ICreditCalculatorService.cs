@@ -7,6 +7,6 @@ namespace SimpleCreditCalculator.Services
         /// <summary>
         /// Получить рассчитанные данные по кредиту
         /// </summary>
-        IOutputDataCreditDetails GetOutputDataCreditDetails(IInputDataCredit inputDataCredit);
+        IOutputDataCredit GetOutputDataCreditDetails(IInputDataCredit inputDataCredit);
     }
 }
