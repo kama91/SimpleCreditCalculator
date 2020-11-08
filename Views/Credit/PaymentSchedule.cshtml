@@ -56,7 +56,7 @@
 
         function getOverPayment() {
             return $.ajax({
-                url: '/api/datacredit/overpayment',
+                url: '/credit/overpayment',
                 success: function(data) {
                     const input = document.getElementById("overPayment");
                     input.value = data;

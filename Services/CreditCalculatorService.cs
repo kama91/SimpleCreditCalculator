@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using SimpleCreditCalculator.Models;
 using SimpleCreditCalculator.Models.Interfaces;
 
@@ -7,46 +8,55 @@ namespace SimpleCreditCalculator.Services
 {
     public class CreditCalculatorService : ICreditCalculatorService
     {
-        public IInputDataCredit InputDataCredit { get; set; }
+        private ILogger<ICreditCalculatorService> _logger;
 
-        public IEnumerable<IOutputDataCredit> GetPaymentsSchedule()
+        public CreditCalculatorService(ILogger<CreditCalculatorService> logger)
         {
-            if (InputDataCredit == null) return new List<IOutputDataCredit>();
-            var i = InputDataCredit.InterestRateOfYear / 100 / 12;
-            var a = GetAmountPayment();
-            var result = new List<IOutputDataCredit>(InputDataCredit.CreditTerm);
-            var date = DateTime.Now.Date;
-            var balanceDebt = InputDataCredit.SumOfCredit;
-            for (var j = 0; j < InputDataCredit.CreditTerm; j++)
+            _logger = logger;
+        }
+
+        public IOutputDataCreditDetails GetOutputDataCreditDetails(IInputDataCredit inputDataCredit)
+        {
+            if (inputDataCredit == null)
             {
-                var paymentPercent = balanceDebt * i;
-                var paymentBody = a - paymentPercent;
+                return null;
+            }
+
+            var annuityPaymentFactor = inputDataCredit.InterestRateOfYear / 100 / 12;
+            var amountPayment = GetAmountPayment(inputDataCredit);
+            var paymentsDetails = new List<IPaymentDetails>(inputDataCredit.CreditTerm);
+            var date = DateTime.Now.Date;
+            var balanceDebt = inputDataCredit.SumOfCredit;
+            for (var j = 0; j < inputDataCredit.CreditTerm; j++)
+            {
+                var paymentPercent = balanceDebt * annuityPaymentFactor;
+                var paymentBody = amountPayment - paymentPercent;
                 balanceDebt  -= paymentBody;
-                result.Add(new OutputDataCredit
-                {
-                    PaymentNumber = j + 1,
-                    PaymentDate = date.ToString("dd/MM/yyyy"),
-                    PaymentBody = Math.Round(paymentBody, 2),
-                    PaymentPercent = Math.Round(paymentPercent, 2),
-                    BalanceDebt =  Math.Round(balanceDebt, 2),
-                });
+                paymentsDetails.Add(new PaymentDetails(
+                    j + 1,
+                    date.ToString("dd/MM/yyyy"),
+                    Math.Round(paymentBody, 2),
+                    Math.Round(paymentPercent, 2),
+                    Math.Round(balanceDebt, 2)
+                ));
+
                 date = date.AddMonths(1);
             }
 
-            return result;
+            return new OutputDataCreditDetails(paymentsDetails, GetOverPayment(inputDataCredit));
         }
 
-        private decimal GetAmountPayment()
+        private decimal GetAmountPayment(IInputDataCredit inputDataCredit)
         {
-            var i = InputDataCredit.InterestRateOfYear / 100 / 12;
-            var c = InputDataCredit.CreditTerm;
-            var k = decimal.ToDouble(i) * Math.Pow(decimal.ToDouble(1 + i), c) / (Math.Pow(decimal.ToDouble(1 + i), c) - 1);
-            return InputDataCredit.SumOfCredit * (decimal)k;
+            var annuityPaymentFactor = inputDataCredit.InterestRateOfYear / 100 / 12;
+            var creditTerm = inputDataCredit.CreditTerm;
+            var factor = decimal.ToDouble(annuityPaymentFactor) * Math.Pow(decimal.ToDouble(1 + annuityPaymentFactor), creditTerm) / (Math.Pow(decimal.ToDouble(1 + annuityPaymentFactor), creditTerm) - 1);
+            return inputDataCredit.SumOfCredit * (decimal)factor;
         }
 
-        public decimal GetOverPayment()
+        private decimal GetOverPayment(IInputDataCredit inputDataCredit)
         {
-            return  Math.Round(GetAmountPayment() * InputDataCredit.CreditTerm - InputDataCredit.SumOfCredit, 2);
+            return  Math.Round(GetAmountPayment(inputDataCredit) * inputDataCredit.CreditTerm - inputDataCredit.SumOfCredit, 2);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SimpleCreditCalculator.Models;
 using SimpleCreditCalculator.Models.Interfaces;
@@ -20,18 +19,10 @@ namespace SimpleCreditCalculator.Controllers
             _logger = logger;
         }
         
-        [HttpGet("paymentschedule")]
-        public IEnumerable<IOutputDataCredit> GetPaymentSchedule([FromBody] InputDataCredit inputDataCredit)
+        [HttpGet("getoutputdatacreditdetails")]
+        public IOutputDataCreditDetails GetOutputDataCreditDetails([FromBody] InputDataCredit inputDataCredit)
         {
-            _creditCalculatorService.InputDataCredit = inputDataCredit;
-            var paymentSchedule = _creditCalculatorService.GetPaymentsSchedule();
-            return paymentSchedule;
-        }
-        
-        [HttpGet("overpayment")]
-        public decimal GetOverPayment()
-        {
-            return _creditCalculatorService.GetOverPayment();
+            return _creditCalculatorService.GetOutputDataCreditDetails(inputDataCredit);
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using SimpleCreditCalculator.Models.Interfaces;
+﻿using SimpleCreditCalculator.Models.Interfaces;
 
 namespace SimpleCreditCalculator.Services
 {
     public interface ICreditCalculatorService
     {
-       IInputDataCredit InputDataCredit { get; set; }
-       decimal GetOverPayment();
-       IEnumerable<IOutputDataCredit> GetPaymentsSchedule();
+        /// <summary>
+        /// Получить рассчитанные данные по кредиту
+        /// </summary>
+        IOutputDataCreditDetails GetOutputDataCreditDetails(IInputDataCredit inputDataCredit);
     }
 }

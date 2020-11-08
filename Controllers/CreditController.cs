@@ -12,7 +12,8 @@ namespace SimpleCreditCalculator.Controllers
     {
         private readonly ILogger<CreditController> _logger;
         private readonly ICreditCalculatorService _creditCalculatorService;
-        
+        private static IOutputDataCreditDetails _outputDataCreditDetails;
+
         public CreditController(ICreditCalculatorService creditCalculatorService, ILogger<CreditController> logger)
         {
             _creditCalculatorService = creditCalculatorService;
@@ -33,16 +34,21 @@ namespace SimpleCreditCalculator.Controllers
                 return RedirectToAction("Index", "Credit");
             }
 
-            _creditCalculatorService.InputDataCredit = inputDataCredit;
+            _outputDataCreditDetails = _creditCalculatorService.GetOutputDataCreditDetails(inputDataCredit);
 
             return View();
         }
 
         [HttpGet("/[controller]/paymentschedule")]
-        public IEnumerable<IOutputDataCredit> GetPaymentsSchedule()
+        public IReadOnlyCollection<IPaymentDetails> GetPaymentsSchedule()
         {
-            var schedule = _creditCalculatorService.GetPaymentsSchedule();
-            return schedule;
+            return _outputDataCreditDetails.PaymentDetails;
+        }
+
+        [HttpGet("/[controller]/overpayment")]
+        public decimal GetOverPayment()
+        {
+            return _outputDataCreditDetails.OverPayment;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

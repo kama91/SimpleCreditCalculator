@@ -10,7 +10,7 @@ namespace SimpleCreditCalculator.Models
 
         [Range(1, 100000)]
         public int CreditTerm { get; set; }
-        
+
         [Range(0.1, 100.0)]
         public decimal InterestRateOfYear { get; set; }
 
