@@ -19,7 +19,7 @@ namespace SimpleCreditCalculator.Services
         {
             if (inputDataCredit == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(inputDataCredit));
             }
 
             var annuityPaymentFactor = inputDataCredit.InterestRateOfYear / 100 / 12;
